@@ -9,3 +9,12 @@ export const triggerForm = (swalObject: SweetAlertOptions) => {
         }
     );
 };
+
+export const validateRequired = (value: string) => {
+    let error;
+    if (!value) {
+        error = "Required";
+    }
+
+    return error;
+};

@@ -1,12 +1,12 @@
 'use client';
 import { useState } from 'react';
-import { Formik, Form } from 'formik';
-import { Form as RBForm, Alert, Spinner } from 'react-bootstrap';
+import { Formik, Field, Form as FormikForm } from "formik";
+import { Form, Alert, Spinner } from 'react-bootstrap';
 
 import { useUser } from '@/context/UserContext';
 import Button from '@/components/button/Button';
 import instance from '@/shared/baseServices';
-import { triggerForm } from '@/shared/internalServices';
+import { triggerForm, validateRequired } from '@/shared/internalServices';
 import { useRouter } from 'next/navigation';
 
 const SigninMainView = () => {
@@ -72,39 +72,40 @@ const SigninMainView = () => {
                 validate={validate}
                 onSubmit={handleSubmit}
             >
-                {({ handleChange, values, touched, errors }) => (
-                    <Form>
-                        <RBForm.Group className="mb-3">
-                            <RBForm.Label>Email</RBForm.Label>
-                            <RBForm.Control
-                                type="email"
-                                name="email"
-                                value={values.email}
-                                onChange={handleChange}
-                                isInvalid={!!errors.email && touched.email}
-                            />
-                            <RBForm.Control.Feedback type="invalid">
-                                {errors.email}
-                            </RBForm.Control.Feedback>
-                        </RBForm.Group>
+                {({ errors }) => (
+                    <FormikForm>
 
-                        <RBForm.Group className="mb-3">
-                            <RBForm.Label>Password</RBForm.Label>
-                            <RBForm.Control
-                                type="password"
-                                name="password"
-                                value={values.password}
-                                onChange={handleChange}
-                                isInvalid={!!errors.password && touched.password}
+                        <Form.Group className="mb-3">
+                            <Form.Label htmlFor="email">Email</Form.Label>
+                            <Field
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="userName@gmail.com"
+                                validate={validateRequired}
                             />
-                            <RBForm.Control.Feedback type="invalid">
-                                {errors.password}
-                            </RBForm.Control.Feedback>
-                        </RBForm.Group>
+                            {errors.email && (
+                                <Form.Text className="text-danger">{errors.email}</Form.Text>
+                            )}
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Field
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="******"
+                                validate={validateRequired}
+                            />
+                            {errors.password && (
+                                <Form.Text className="text-danger">{errors.password}</Form.Text>
+                            )}
+                        </Form.Group>
                         <Button type='submit' className='w-100'>
                             {loading ? <Spinner size="sm" animation="border" /> : 'Login'}
                         </Button>
-                    </Form>
+                    </FormikForm>
                 )}
             </Formik>
         </div>
