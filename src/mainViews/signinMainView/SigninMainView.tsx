@@ -1,16 +1,19 @@
 'use client';
-import axios from 'axios';
 import { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { Form as RBForm, Alert, Spinner } from 'react-bootstrap';
 
 import { useUser } from '@/context/UserContext';
 import Button from '@/components/button/Button';
+import instance from '@/shared/baseServices';
+import { triggerForm } from '@/shared/internalServices';
+import { useRouter } from 'next/navigation';
 
 const SigninMainView = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { setUser } = useUser();
+    const router = useRouter()
 
 
     const validate = (values: { email: string; password: string }) => {
@@ -34,11 +37,27 @@ const SigninMainView = () => {
         setError('');
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', values); // adjust endpoint
+            const res = await instance.post("/auth/login", values); // adjust endpoint
             const user = res.data.user;
+            triggerForm({
+                title: "",
+                text: `Successfully Registered`,
+                icon: "success",
+                confirmButtonText: "OK",
+            })
             setUser(user);
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed');
+            router.push("/dashboard")
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err?.message || 'Login failed');
+                triggerForm({
+                    title: "",
+                    text: `${err?.message || 'Login failed'}`,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                })
+            }
+
         } finally {
             setLoading(false);
         }
