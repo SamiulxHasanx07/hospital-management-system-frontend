@@ -1,7 +1,7 @@
 'use client';
+
 import { useState } from 'react';
 import { Formik, Field, Form as FormikForm } from 'formik';
-import { Form, Alert, Spinner } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
 import { useUser } from '@/context/UserContext';
@@ -52,75 +52,75 @@ const SignupMainView = () => {
             });
             setUser(user);
             router.push('/dashboard');
-        } catch (err: any) {
-            setError(err?.response?.data?.message || 'Signup failed');
-            triggerForm({
-                title: '',
-                text: err?.response?.data?.message || 'Signup failed',
-                icon: 'error',
-                confirmButtonText: 'OK',
-            });
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err?.message || 'Signup failed');
+                triggerForm({
+                    title: '',
+                    text: err?.message || 'Signup failed',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="max-w-md mx-auto mt-5 p-4 border rounded shadow">
-            <h2 className="text-center mb-4">Sign Up</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
+        <div className="max-w-md mx-auto mt-5 p-6 border rounded-lg shadow-lg">
+            <h2 className="text-center text-xl font-semibold mb-4">Sign Up</h2>
+            {error && <div className="bg-red-100 text-red-800 p-2 mb-4 rounded">{error}</div>}
 
             <Formik initialValues={initialValues} validate={validate} onSubmit={handleSubmit}>
                 {({ errors }) => (
                     <FormikForm>
-                        <Form.Group className="mb-3">
-                            <Form.Label htmlFor="role">Sign up as</Form.Label>
-                            <Field as="select" name="role" className="form-select">
+                        <div className="mb-4">
+                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">Sign up as</label>
+                            <Field as="select" name="role" className="w-full p-3 border border-gray-300 rounded-md mt-2">
                                 <option value="">Select Role</option>
                                 <option value="DOCTOR">Doctor</option>
                                 <option value="NURSE">Nurse</option>
                                 <option value="PATIENT">Patient</option>
                             </Field>
-                            {errors.role && <Form.Text className="text-danger">{errors.role}</Form.Text>}
-                        </Form.Group>
+                            {errors.role && <div className="text-red-600 text-xs mt-1">{errors.role}</div>}
+                        </div>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
+                        <div className="mb-4">
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
                             <Field
                                 type="text"
                                 name="name"
-                                className="form-control"
+                                className="w-full p-3 border border-gray-300 rounded-md mt-2"
                                 placeholder="John Doe"
                             />
-                            {errors.name && <Form.Text className="text-danger">{errors.name}</Form.Text>}
-                        </Form.Group>
+                            {errors.name && <div className="text-red-600 text-xs mt-1">{errors.name}</div>}
+                        </div>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email</Form.Label>
+                        <div className="mb-4">
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                             <Field
                                 type="email"
                                 name="email"
-                                className="form-control"
+                                className="w-full p-3 border border-gray-300 rounded-md mt-2"
                                 placeholder="john@example.com"
                             />
-                            {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
-                        </Form.Group>
+                            {errors.email && <div className="text-red-600 text-xs mt-1">{errors.email}</div>}
+                        </div>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
+                        <div className="mb-4">
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
                             <Field
                                 type="password"
                                 name="password"
-                                className="form-control"
+                                className="w-full p-3 border border-gray-300 rounded-md mt-2"
                                 placeholder="******"
                             />
-                            {errors.password && (
-                                <Form.Text className="text-danger">{errors.password}</Form.Text>
-                            )}
-                        </Form.Group>
+                            {errors.password && <div className="text-red-600 text-xs mt-1">{errors.password}</div>}
+                        </div>
 
-                        <Button type="submit" className="w-100">
-                            {loading ? <Spinner size="sm" animation="border" /> : 'Sign Up'}
+                        <Button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-md">
+                            {loading ? <span className="spinner-border spinner-border-sm"></span> : 'Sign Up'}
                         </Button>
                     </FormikForm>
                 )}
