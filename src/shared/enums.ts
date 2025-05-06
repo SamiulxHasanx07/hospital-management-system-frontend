@@ -11,3 +11,10 @@ export enum BUTTON_SIZE_ENUM {
     Large = "large",
     Default = "default",
 }
+
+export enum USERS {
+    DOCTOR = "doctor",
+    PATIENT = "patient",
+    NURSE = "nurse",
+    ADMIN = "admin",
+}

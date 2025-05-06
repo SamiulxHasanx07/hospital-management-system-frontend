@@ -13,12 +13,35 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
+import { BsCalendar2Date } from "react-icons/bs";
+import { LiaWpforms } from "react-icons/lia";
+import { RiContactsLine } from "react-icons/ri";
+import { useUser } from "@/context/UserContext";
 type NavItem = {
   name: string;
   icon: React.ReactNode;
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
+
+const patientNavItems: NavItem[] = [
+  {
+    icon: <BsCalendar2Date />,
+    name: "Appintment",
+    subItems: [
+      { name: "Appointments", path: "/create-appointment", pro: false },
+      { name: "Create Appointment", path: "/create-appointment", pro: false },
+    ],
+  },
+  {
+    icon: <LiaWpforms />,
+    name: "Admit Patient"
+  },
+  {
+    icon: <RiContactsLine />,
+    name: "Contact info"
+  }
+]
 
 const navItems: NavItem[] = [
   {
@@ -59,7 +82,18 @@ const navItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const pathname = usePathname();
+  const { user } = useUser();
 
+  let dashboardMenu = navItems;
+
+  const getNavItems = (role: string) => {
+    if (role == "PATIENT") {
+      dashboardMenu = patientNavItems;
+    } else {
+      dashboardMenu = navItems;
+    }
+  }
+  getNavItems(user?.role || "")
   const renderMenuItems = (
     navItems: NavItem[],
     menuType: "main" | "others"
@@ -285,7 +319,7 @@ const AppSidebar: React.FC = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
-            {renderMenuItems(navItems, "main")}
+            {renderMenuItems(dashboardMenu, "main")}
           </div>
         </nav>
       </div>
