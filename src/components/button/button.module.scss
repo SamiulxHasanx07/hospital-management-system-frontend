@@ -1,0 +1,121 @@
+@import "../../styles/mixins.scss";
+@import "../../styles/variables.scss";
+
+.button {
+  border: 1px solid;
+  font-size: 1rem;
+  align-items: center;
+  display: inline-grid;
+  grid-auto-rows: auto;
+  grid-auto-columns: max-content;
+  grid-auto-flow: column;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 110px;
+  border-radius: 2px;
+  padding: 0 1rem;
+  font-weight: 600;
+  transition: border-color 0.24s ease, background-color 0.24s ease,
+    transform 0.24s ease, box-shadow 0.24s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    @include box-shadow(level-1-1);
+  }
+
+  &:active {
+    box-shadow: inset 0px 3px 6px -1px rgba($color: #000000, $alpha: 0.16);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  &.block {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  &.default {
+    height: 40px;
+    background-color: $primary;
+    color: $white;
+
+    &:hover {
+      background-color: $secondary;
+    }
+  }
+
+  &.large {
+    height: 50px;
+  }
+
+  &.small {
+    height: 30px;
+  }
+
+  &.primary {
+    background-color: $primary;
+    border-color: $primary;
+    color: $white;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: $secondary;
+      border-color: $secondary;
+    }
+  }
+
+  &.secondary {
+    background-color: $secondary;
+    border-color: $secondary;
+    color: $white;
+
+    &:hover {
+      background-color: $primary;
+      border-color: lighten($color: $primary, $amount: 35);
+    }
+  }
+
+  &.white {
+    background-color: $white;
+    border-color: $white;
+    color: $primary;
+
+    &:hover {
+      color: $white;
+      background-color: $primary;
+      border-color: $primary !important;
+      border-color: lighten($color: $primary, $amount: 35);
+    }
+  }
+
+  &.tertiary {
+    background-color: $white;
+    color: var(--seondary);
+    border-color: var(--seondary);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: lighten($color: $primary, $amount: 47);
+    }
+  }
+
+  &.text {
+    background: transparent;
+    border-color: transparent;
+    min-width: auto;
+    color: var(--primary);
+    padding: 0;
+    height: auto;
+
+    &:hover {
+      box-shadow: none;
+      color: darken($color: $primary, $amount: 05);
+      background: none;
+    }
+  }
+}
