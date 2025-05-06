@@ -1,9 +1,10 @@
+import SignUpForm from '@/components/auth/SignUpForm';
 import React from 'react';
 
 const MainPage = () => {
   return (
     <div>
-      Welcome to hospital Mangement system
+      <SignUpForm />
     </div>
   );
 };
