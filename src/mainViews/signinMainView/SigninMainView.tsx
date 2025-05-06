@@ -74,7 +74,6 @@ const SigninMainView = () => {
             >
                 {({ errors }) => (
                     <FormikForm>
-
                         <Form.Group className="mb-3">
                             <Form.Label htmlFor="email">Email</Form.Label>
                             <Field
