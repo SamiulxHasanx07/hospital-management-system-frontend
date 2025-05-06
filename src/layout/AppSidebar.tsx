@@ -26,7 +26,7 @@ type NavItem = {
 
 const patientNavItems: NavItem[] = [
   {
-    icon: <BsCalendar2Date />,
+    icon: <BsCalendar2Date size={18} />,
     name: "Appintment",
     subItems: [
       { name: "Appointments", path: "/create-appointment", pro: false },
@@ -34,12 +34,14 @@ const patientNavItems: NavItem[] = [
     ],
   },
   {
-    icon: <LiaWpforms />,
-    name: "Admit Patient"
+    icon: <LiaWpforms size={18} />,
+    name: "Admit Patient",
+    path: "admit-patient"
   },
   {
-    icon: <RiContactsLine />,
-    name: "Contact info"
+    icon: <RiContactsLine size={18} />,
+    name: "Contact info",
+    path: "contact-info"
   }
 ]
 
