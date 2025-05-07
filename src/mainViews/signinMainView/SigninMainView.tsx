@@ -37,28 +37,29 @@ const SigninMainView = () => {
         try {
             const res = await instance.post("/auth/login", values);
             const user = res.data.user;
+
             triggerForm({
                 title: "",
                 text: `Successfully Registered`,
                 icon: "success",
                 confirmButtonText: "OK",
             });
+
             setUser(user);
             router.push("/dashboard");
         } catch (err: unknown) {
-        
-                setError(err?.message || 'Login failed');
-                triggerForm({
-                    title: "",
-                    text: `${err?.message || 'Login failed'}`,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
-            }
+            setError(err?.message || 'Login failed');
+            triggerForm({
+                title: "",
+                text: `${err?.message || 'Login failed'}`,
+                icon: "error",
+                confirmButtonText: "OK",
+            });
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="max-w-md mx-auto mt-5 p-6 bg-white border rounded-lg shadow-lg">
