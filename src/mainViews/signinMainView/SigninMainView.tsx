@@ -46,7 +46,7 @@ const SigninMainView = () => {
             setUser(user);
             router.push("/dashboard");
         } catch (err: unknown) {
-            if (err instanceof Error) {
+        
                 setError(err?.message || 'Login failed');
                 triggerForm({
                     title: "",

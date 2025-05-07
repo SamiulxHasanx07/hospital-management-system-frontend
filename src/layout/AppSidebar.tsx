@@ -44,6 +44,23 @@ const patientNavItems: NavItem[] = [
     path: "contact-info"
   }
 ]
+const doctorNavItems: NavItem[] = [
+  {
+    icon: <BsCalendar2Date size={18} />,
+    name: "Available schedules",
+    path: "/available-schedule"
+  },
+  {
+    icon: <RiContactsLine size={18} />,
+    name: "Patients",
+    path: "/patients"
+  },
+  {
+    icon: <RiContactsLine size={18} />,
+    name: "Contact info",
+    path: "contact-info"
+  }
+]
 
 const navItems: NavItem[] = [
   {
@@ -91,6 +108,8 @@ const AppSidebar: React.FC = () => {
   const getNavItems = (role: string) => {
     if (role == "PATIENT") {
       dashboardMenu = patientNavItems;
+    } else if (role == "DOCTOR") {
+      dashboardMenu = doctorNavItems;
     } else {
       dashboardMenu = navItems;
     }
