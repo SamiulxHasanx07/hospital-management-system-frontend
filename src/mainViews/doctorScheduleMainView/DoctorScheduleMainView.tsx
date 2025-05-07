@@ -5,13 +5,14 @@ import Button from '@/components/button/Button';
 import instance from '@/shared/baseServices';
 import { useUser } from '@/context/UserContext';
 import Modal from '@/components/modal/Modal';
-import { IDoctorTimeSlot } from '@/shared/interface';
+import { IDoctorSchedule, IDoctorTimeSlot } from '@/shared/interface';
+import { triggerForm } from '@/shared/internalServices';
+
 const DoctorScheduleMainView = () => {
-    const [schedules, setSchedules] = useState([]);
+    const [schedules, setSchedules] = useState<IDoctorSchedule[] | []>([]);
     const [slots, setSlots] = useState<IDoctorTimeSlot[] | []>([]);
     const { user } = useUser();
     const [isOpen, setIsOpen] = useState(false);
-    const [date, setDate] = useState<string>('');
     const [visitFee, setVisitFee] = useState<number>(0);
     const [branch, setBranch] = useState<string>('');
     const [floorNumber, setFloorNumber] = useState<string>('');
@@ -19,17 +20,19 @@ const DoctorScheduleMainView = () => {
     const [location, setLocation] = useState<string>('');
     const [remarks, setRemarks] = useState<string>('');
     const [status, setStatus] = useState<string>('active');
-    const [loading, setLoading] = useState<boolean>(false);
+    const [slotId, setSlotId] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
 
     useEffect(() => {
         const getSchedules = async () => {
             try {
+                setLoading(true)
                 const response = await instance.get(`/doctor-schedule/by-doctor/${user?.id}`);
                 if (response.data.length) {
                     setSchedules(response.data)
                 }
-                return response.data;
+                setLoading(false)
             } catch (error) {
                 console.log(error)
             }
@@ -58,9 +61,12 @@ const DoctorScheduleMainView = () => {
         setError('');
 
         try {
+            setLoading(true)
             const doctorId = user?.id;
-            const response = await instance('/doctor-schedule', {
+            const date = new Date().toISOString();
+            const response = await instance.post('/doctor-schedule', {
                 doctorId,
+                slotId,
                 date,
                 visitFee,
                 branch,
@@ -70,19 +76,16 @@ const DoctorScheduleMainView = () => {
                 remarks,
                 status
             });
-            console.log({
-                doctorId,
-                date,
-                visitFee,
-                branch,
-                floorNumber,
-                roomNumber,
-                location,
-                remarks,
-                status
-            })
-            if (response.status === 200) {
-                console.log("Schedule created successfully!")
+
+            setLoading(false)
+
+            if (response.status == 200 || response.status == 201) {
+                triggerForm({
+                    title: "",
+                    text: `Successfully added schedule`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
             }
         } catch (err) {
             setError('Error creating schedule. Please try again.');
@@ -91,26 +94,85 @@ const DoctorScheduleMainView = () => {
             setLoading(false);
         }
     };
-
+    const formatDate = (date: string) => {
+        const d = new Date(date);
+        return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+    };
     return (
         <div>
-            {(!schedules.length || schedules.length == 0) && (
+            {(!loading && !schedules.length && schedules.length == 0) ? (
                 <>
                     <h2>You have not selected any schedule yet!</h2>
                     <Button onClick={() => setIsOpen(true)}>Add Schedule</Button>
                 </>
-            )}
+            ) : ""}
+            {schedules.length > 0 ? (
+                <>
+                    <h2>Add New Schedule</h2>
+                    <Button onClick={() => setIsOpen(true)}>Add Schedule</Button>
+                </>
+            ) : ""}
+            <div className='mt-5'>
+                {loading && "Loading..."}
+            </div>
+            {!loading && schedules.length ? (
+                <table className="min-w-full table-auto bg-white mt-4">
+                    <thead className="bg-gray-800 text-white">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-sm font-medium">ID</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Doctor ID</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Date</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Visit Fee</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Branch</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Floor</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Room</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Location</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Remarks</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Status</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Slot ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {schedules.map((item) => (
+                            <tr
+                                key={item.id}
+                                className="hover:bg-gray-100 border-b border-gray-200 transition-all duration-200"
+                            >
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.id}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.doctorId}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{formatDate(item.date)}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">${item.visitFee}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.branch}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.floorNumber}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.roomNumber}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.location}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.remarks}</td>
+                                <td className="px-6 py-4 text-sm text-gray-700">
+                                    <span
+                                        className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${item.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                                            }`}
+                                    >
+                                        {item.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-700">{item.slotId}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : ""}
+
+
             <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)} >
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-gray-700">Select slot</label>
                         <select
-                            // value={department}
-                            // onChange={(e) => setDepartment(e.target.value)}
+                            onChange={(e) => setSlotId(Number(e.target.value))}
                             className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         >
-                            <option value="">Select a department</option>
+                            <option value={0}>Select a department</option>
                             {slots.map((e, index) => {
                                 const start = new Date(e.startTime);
                                 const end = new Date(e.endTime);
@@ -127,7 +189,7 @@ const DoctorScheduleMainView = () => {
                                     hour12: true,
                                 });
                                 return (
-                                    <option key={index}>{formattedStartTime} - {formattedEndTime}</option>
+                                    <option value={e.id} key={index}>{formattedStartTime} - {formattedEndTime}</option>
                                 )
                             })}
                         </select>
