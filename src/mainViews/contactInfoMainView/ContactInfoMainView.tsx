@@ -60,6 +60,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setPhone(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Enter phon number'
                 />
             </div>
 
@@ -70,6 +71,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Enter email'
                 />
             </div>
 
@@ -80,6 +82,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setHouse(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Enter house no'
                 />
             </div>
 
@@ -90,6 +93,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setVillage(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Enter village'
                 />
             </div>
 
@@ -100,6 +104,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setPostOffice(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Post office'
                 />
             </div>
 
@@ -110,6 +115,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setCity(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='City'
                 />
             </div>
 
@@ -120,6 +126,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setDivision(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Division'
                 />
             </div>
 
@@ -130,6 +137,7 @@ const ContactInfoMainView = () => {
                     onChange={(e) => setCountry(e.target.value)}
                     className="mt-1 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
+                    placeholder='Country'
                 />
             </div>
 
