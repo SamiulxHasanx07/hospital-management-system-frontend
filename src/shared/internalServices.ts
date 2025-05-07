@@ -18,3 +18,25 @@ export const validateRequired = (value: string) => {
 
     return error;
 };
+
+export const formatDate = (date: string) => {
+    const d = new Date(date);
+    return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
+};
+export function extractTime(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+}
+
+export function formatTime(dateInput: string | Date): string {
+    const date = new Date(dateInput);
+    return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+}

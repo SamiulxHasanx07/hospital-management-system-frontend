@@ -6,7 +6,8 @@ import instance from '@/shared/baseServices';
 import { useUser } from '@/context/UserContext';
 import Modal from '@/components/modal/Modal';
 import { IDoctorSchedule, IDoctorTimeSlot } from '@/shared/interface';
-import { triggerForm } from '@/shared/internalServices';
+import { formatTime, triggerForm } from '@/shared/internalServices';
+import { IoTrashOutline } from 'react-icons/io5';
 
 const DoctorScheduleMainView = () => {
     const [schedules, setSchedules] = useState<IDoctorSchedule[] | []>([]);
@@ -34,6 +35,7 @@ const DoctorScheduleMainView = () => {
                 }
                 setLoading(false)
             } catch (error) {
+                setLoading(false)
                 console.log(error)
             }
         }
@@ -80,6 +82,7 @@ const DoctorScheduleMainView = () => {
             setLoading(false)
 
             if (response.status == 200 || response.status == 201) {
+                setIsOpen(false)
                 triggerForm({
                     title: "",
                     text: `Successfully added schedule`,
@@ -94,10 +97,26 @@ const DoctorScheduleMainView = () => {
             setLoading(false);
         }
     };
-    const formatDate = (date: string) => {
-        const d = new Date(date);
-        return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-    };
+
+    const handleRemoveClick = async (id: number) => {
+        try {
+            setLoading(true)
+            const response = await instance.delete(`/doctor-schedule/${id}`);
+            setLoading(false)
+            if (response.status == 200 || response.status == 201) {
+                triggerForm({
+                    title: "",
+                    text: `Successfully deleted schedule`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+            }
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
+    }
+
     return (
         <div>
             {(!loading && !schedules.length && schedules.length == 0) ? (
@@ -120,8 +139,9 @@ const DoctorScheduleMainView = () => {
                     <thead className="bg-gray-800 text-white">
                         <tr>
                             <th className="px-6 py-3 text-left text-sm font-medium">ID</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Doctor ID</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Date</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Start Time</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">End Time</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Maximum Patients</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Visit Fee</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Branch</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Floor</th>
@@ -129,35 +149,40 @@ const DoctorScheduleMainView = () => {
                             <th className="px-6 py-3 text-left text-sm font-medium">Location</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Remarks</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Status</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Slot ID</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {schedules.map((item) => (
-                            <tr
-                                key={item.id}
-                                className="hover:bg-gray-100 border-b border-gray-200 transition-all duration-200"
-                            >
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.id}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.doctorId}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{formatDate(item.date)}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">${item.visitFee}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.branch}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.floorNumber}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.roomNumber}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.location}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.remarks}</td>
-                                <td className="px-6 py-4 text-sm text-gray-700">
-                                    <span
-                                        className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${item.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
-                                            }`}
-                                    >
-                                        {item.status}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-sm text-gray-700">{item.slotId}</td>
-                            </tr>
-                        ))}
+                        {schedules.map((item) => {
+                            const timeSlot = slots.find((e) => e.id == item.id)
+                            return (
+                                <tr
+                                    key={item.id}
+                                    className="hover:bg-gray-100 border-b border-gray-200 transition-all duration-200"
+                                >
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.id}</td>
+                                    <th className="px-6 py-4 text-sm text-gray-700">{formatTime(timeSlot?.startTime || "")}</th>
+                                    <th className="px-6 py-4 text-sm text-gray-700">{formatTime(timeSlot?.endTime || "")}</th>
+                                    <th className="px-6 py-4 text-sm text-gray-700">{timeSlot?.maxPatients}</th>
+                                    <td className="px-6 py-4 text-sm text-gray-700">${item.visitFee}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.branch}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.floorNumber}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.roomNumber}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.location}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.remarks}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">
+                                        <span
+                                            className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${item.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                                                }`}
+                                        >
+                                            {item.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-700"><span onClick={() => handleRemoveClick(item.id)}><IoTrashOutline size={20} /></span></td>
+                                </tr>
+                            )
+
+                        })}
                     </tbody>
                 </table>
             ) : ""}
@@ -176,18 +201,9 @@ const DoctorScheduleMainView = () => {
                             {slots.map((e, index) => {
                                 const start = new Date(e.startTime);
                                 const end = new Date(e.endTime);
+                                const formattedStartTime = formatTime(start);
+                                const formattedEndTime = formatTime(end);
 
-                                const formattedStartTime = start.toLocaleTimeString("en-US", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                });
-
-                                const formattedEndTime = end.toLocaleTimeString("en-US", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                });
                                 return (
                                     <option value={e.id} key={index}>{formattedStartTime} - {formattedEndTime}</option>
                                 )
