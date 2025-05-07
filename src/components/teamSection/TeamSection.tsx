@@ -33,11 +33,8 @@ const TeamSection: React.FC = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 py-12">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-800 mb-3">Our Team</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-3">Team Members</h2>
                 <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
-                <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
-                    Meet the talented individuals behind the Hospital Management System project
-                </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
