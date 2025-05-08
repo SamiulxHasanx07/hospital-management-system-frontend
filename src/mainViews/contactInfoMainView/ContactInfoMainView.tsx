@@ -2,10 +2,11 @@
 import { useUser } from '@/context/UserContext';
 import instance from '@/shared/baseServices';
 import { triggerForm } from '@/shared/internalServices';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const ContactInfoMainView = () => {
     const { user } = useUser();
+    const formRef = useRef<HTMLFormElement>(null);
     const [city, setCity] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -38,6 +39,7 @@ const ContactInfoMainView = () => {
                     icon: "success",
                     confirmButtonText: "OK",
                 });
+                formRef.current?.reset();
             }
 
         } catch (error) {
@@ -49,10 +51,9 @@ const ContactInfoMainView = () => {
                 confirmButtonText: "OK",
             });
         }
-        console.log("Submitted:", formData);
     };
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-4">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-4">
             <div className="flex flex-col">
                 <label className="text-sm font-medium text-gray-700">Phone</label>
                 <input
