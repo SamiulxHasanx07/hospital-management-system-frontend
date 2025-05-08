@@ -6,10 +6,12 @@ import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useUser } from "@/context/UserContext";
 import Button from "../button/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setUser } = useUser();
+  const router = useRouter()
 
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
@@ -22,6 +24,7 @@ export default function UserDropdown() {
 
   function logout() {
     setUser(null);
+    router.push("/")
   }
 
   return (
