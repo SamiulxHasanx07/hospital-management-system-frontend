@@ -23,10 +23,10 @@ export default function AdminLayout({
       ? "lg:ml-[290px]"
       : "lg:ml-[90px]";
 
-  if (!user) {
-    router.push("/signin");
-    return null;
-  }
+  // if (!user?.email) {
+  //   router.push("/signin");
+  //   return null;
+  // }
 
   return (
     <div className="min-h-screen xl:flex">
