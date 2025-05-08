@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form as FormikForm } from "formik";
 import { triggerForm, validateRequired } from '@/shared/internalServices';
-import { IBed } from '@/shared/interface';
+import { IAdmission, IBed } from '@/shared/interface';
 import instance from '@/shared/baseServices';
 import Modal from '@/components/modal/Modal';
 import Button from '@/components/button/Button';
@@ -17,6 +17,7 @@ const AdmitPatientMainView = () => {
     const [beds, setBeds] = useState<IBed[] | null>(null);
     const [departments, setDepartments] = useState<IBedGroup[] | null>(null)
     const [department, setDepartment] = useState<IBedGroup | null>(null)
+    const [admissions, setAdmissions] = useState<IAdmission[] | null>(null)
     const [isOpen, setIsOpen] = useState(false);
     const { user } = useUser();
 
@@ -45,6 +46,21 @@ const AdmitPatientMainView = () => {
         }
         getBeds()
     }, [])
+
+
+    useEffect(() => {
+        const getAllPatient = async () => {
+            try {
+                const response = await instance.get(`/admit-patient`)
+                setAdmissions(response.data)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getAllPatient()
+
+    }, [])
+
     const initialValues = {
         patientId: "",
         name: "",
@@ -75,10 +91,52 @@ const AdmitPatientMainView = () => {
         }
     }
 
+    const filterByUser = admissions?.filter((item) => item.patientId == user?.actualId);
     return (
         <div>
             <div className='text-2xl font-bold mb-5'>Admit Emergency Patient</div>
             <Button onClick={() => setIsOpen(true)}>Emergency Admit Patient</Button>
+
+            {!filterByUser?.length && (
+                <div className='text-2xl'>No admission found!</div>
+            )}
+
+
+            {filterByUser?.length && (
+                <table className="min-w-full table-auto bg-white mt-5">
+                    <thead className="bg-gray-800 text-white">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-sm font-medium">SN</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Date</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Patient Name</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Admission Time</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Disease</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Remarks</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Status</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Doctor</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Room/Bed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filterByUser.map((item, index) => {
+                            return (
+                                <tr key={index} className="hover:bg-gray-100 border-b border-gray-200 transition-all duration-200">
+                                    <td className="px-6 py-4 text-sm text-gray-700">1</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{new Date(item.admissionTime).toLocaleDateString()}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.name}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{new Date(item.admissionTime).toLocaleTimeString()}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.condition}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.remarks}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.status}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.admittedBy.name}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.bed.roomNumber} / {item.bed.bedNumber}</td>
+                                </tr>
+                            )
+                        })}
+
+                    </tbody>
+                </table>
+            )}
             <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)} >
                 <Formik initialValues={initialValues} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
                     {({ errors, setFieldValue }) => (

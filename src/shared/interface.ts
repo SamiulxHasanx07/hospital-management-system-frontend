@@ -82,7 +82,6 @@ export interface ISchedule {
     slotId: number;
 }
 
-
 export interface IBed {
     id: number;
     department: string;
@@ -90,4 +89,40 @@ export interface IBed {
     bedNumber: string;
     available: boolean;
     createdAt: string;
+}
+
+export interface IAdmission {
+    id: number;
+    patientId: number;
+    name: string;
+    age: number;
+    gender: string;
+    admittedById: number;
+    condition: string;
+    department: string;
+    bedId: number;
+    admissionTime: string;
+    status: string;
+    remarks: string;
+    patient: {
+        id: number;
+        userId: number;
+        age: number;
+        gender: string;
+    };
+    admittedBy: {
+        id: number;
+        name: string;
+        email: string;
+        password: string;
+        role: string;
+    };
+    bed: {
+        id: number;
+        department: string;
+        roomNumber: string;
+        bedNumber: string;
+        available: boolean;
+        createdAt: string;
+    };
 }
