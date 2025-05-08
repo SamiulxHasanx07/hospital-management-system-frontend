@@ -180,7 +180,9 @@ const AppointmentsUserMainView = () => {
                                             {item.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-gray-700"><span onClick={() => handleRemoveClick(item.id)}><IoTrashOutline size={20} /></span></td>
+                                    <td className="px-6 py-4 text-sm text-gray-700 text-center">
+                                        <span onClick={() => handleRemoveClick(item.id)}><IoTrashOutline size={20} /></span>
+                                    </td>
                                 </tr>
                             )
                         })}
