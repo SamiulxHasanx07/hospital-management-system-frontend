@@ -26,7 +26,7 @@ const AdmittedPatients = () => {
 
     return (
         <div>
-            <div className='text-2xl'>All Nurses</div>
+            <div className='text-2xl'>Admitted Patients</div>
             {!loading && !patients?.length && (
                 <div>Nurse not found!</div>
             )}
