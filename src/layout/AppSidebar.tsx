@@ -52,8 +52,8 @@ const doctorNavItems: NavItem[] = [
   },
   {
     icon: <RiContactsLine size={18} />,
-    name: "Patients",
-    path: "/patients"
+    name: "Appointments",
+    path: "/appointments"
   },
   {
     icon: <RiContactsLine size={18} />,

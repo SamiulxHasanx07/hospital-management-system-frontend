@@ -36,8 +36,7 @@ const SigninMainView = () => {
         setLoading(true);
         try {
             const res = await instance.post("/auth/login", values);
-            const user = res.data.user;
-
+            const user = { ...res.data.user, actualId: res.data.actualId };
             triggerForm({
                 title: "",
                 text: `Successfully Registered`,
