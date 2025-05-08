@@ -126,3 +126,17 @@ export interface IAdmission {
         createdAt: string;
     };
 }
+
+export interface INurse {
+    id: number;
+    userId: number;
+    department: string;
+    shift: string;
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        password: string;
+        role: "NURSE";
+    };
+}

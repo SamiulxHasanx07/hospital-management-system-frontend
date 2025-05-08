@@ -63,36 +63,32 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
+    path: "/dashboard"
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+    name: "Doctors",
+    path: "/doctors",
   },
   {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+    name: "Patients",
+    icon: <UserCircleIcon />,
+    path: "/patients"
   },
   {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
+    name: "Nurses",
+    icon: <UserCircleIcon />,
+    path: "/nurses"
+  },
+  {
+    name: "Admitted Patients",
+    icon: <UserCircleIcon />,
+    path: "/admitted-patients"
+  },
+  {
+    name: "Departments",
+    icon: <UserCircleIcon />,
+    path: "/departments"
   },
 ];
 const AppSidebar: React.FC = () => {

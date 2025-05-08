@@ -1,48 +1,48 @@
-'use client'
-
+'use client';
 import instance from '@/shared/baseServices';
-import { IPatient } from '@/shared/interface';
+import { INurse } from '@/shared/interface';
 import React, { useEffect, useState } from 'react';
 
-const PatientsMainView = () => {
-    const [patients, setPatients] = useState<IPatient[] | null>(null);
+const Doctors = () => {
+    const [nurses, setNurses] = useState<INurse[] | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getPatients = async () => {
+        const getNurses = async () => {
             try {
                 setLoading(true)
-                const response = await instance.get("/patients");
-                setPatients(response.data)
+                const response = await instance.get("/nurses");
+                setNurses(response.data)
                 setLoading(false)
+
             } catch (error) {
                 console.log(error)
                 setLoading(false)
             }
         }
-        getPatients()
+        getNurses()
     }, [])
-
     return (
         <div>
-            <div className='text-2xl'>Patients</div>
-            {!loading && !patients?.length && (
-                <div>Patients not found!</div>
+            <div className='text-2xl'>All Nurses</div>
+            {!loading && !nurses?.length && (
+                <div>Nurse not found!</div>
             )}
             {loading && <div className='text-xl'>Loading...</div>}
-            {!loading && patients?.length && (
+            {!loading && nurses?.length && (
                 <table className="min-w-full table-auto bg-white mt-5">
                     <thead className="bg-gray-800 text-white">
                         <tr>
                             <th className="px-6 py-3 text-left text-sm font-medium">SN</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Name</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Email</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Age</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Department</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Shift</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Role</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {patients?.map((item, index) => {
+                        {nurses?.map((item, index) => {
                             return (
                                 <tr
                                     key={item.id}
@@ -51,7 +51,8 @@ const PatientsMainView = () => {
                                     <td className="px-6 py-4 text-sm text-gray-700">{index + 1}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.name}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.email}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-700">{item.age}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.department}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700">{item.shift}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.role}</td>
                                 </tr>
                             )
@@ -63,4 +64,4 @@ const PatientsMainView = () => {
     );
 };
 
-export default PatientsMainView;
+export default Doctors;
