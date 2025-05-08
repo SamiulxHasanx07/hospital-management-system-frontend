@@ -77,6 +77,7 @@ const AdmitPatientMainView = () => {
 
     return (
         <div>
+            <div className='text-2xl font-bold mb-5'>Admit Emergency Patient</div>
             <Button onClick={() => setIsOpen(true)}>Emergency Admit Patient</Button>
             <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)} >
                 <Formik initialValues={initialValues} onSubmit={(values, { resetForm }) => handleSubmit(values, { resetForm })}>
