@@ -5,18 +5,18 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
-  ListIcon,
-  PageIcon,
-  TableIcon,
-  UserCircleIcon,
 } from "../icons/index";
 import { BsCalendar2Date } from "react-icons/bs";
-import { LiaWpforms } from "react-icons/lia";
+import { LiaUserNurseSolid, LiaWpforms } from "react-icons/lia";
 import { RiContactsLine } from "react-icons/ri";
 import { useUser } from "@/context/UserContext";
+import { SlCalender } from "react-icons/sl";
+import { FaUserDoctor } from "react-icons/fa6";
+import { GrUser } from "react-icons/gr";
+import { LuBedSingle } from "react-icons/lu";
+import { TbLayoutGridAdd } from "react-icons/tb";
 type NavItem = {
   name: string;
   icon: React.ReactNode;
@@ -48,7 +48,7 @@ const doctorNavItems: NavItem[] = [
     path: "/available-schedule"
   },
   {
-    icon: <RiContactsLine size={18} />,
+    icon: <SlCalender size={18} />,
     name: "Appointments",
     path: "/appointments"
   },
@@ -66,28 +66,28 @@ const navItems: NavItem[] = [
     path: "/dashboard"
   },
   {
-    icon: <UserCircleIcon />,
+    icon: <FaUserDoctor size={18} />,
     name: "Doctors",
     path: "/doctors",
   },
   {
     name: "Patients",
-    icon: <UserCircleIcon />,
+    icon: <GrUser size={18} />,
     path: "/patients"
   },
   {
     name: "Nurses",
-    icon: <UserCircleIcon />,
+    icon: <LiaUserNurseSolid size={24} />,
     path: "/nurses"
   },
   {
     name: "Admitted Patients",
-    icon: <UserCircleIcon />,
+    icon: <LuBedSingle size={18} />,
     path: "/admitted-patients"
   },
   {
     name: "Departments",
-    icon: <UserCircleIcon />,
+    icon: <TbLayoutGridAdd size={18} />,
     path: "/departments"
   },
 ];

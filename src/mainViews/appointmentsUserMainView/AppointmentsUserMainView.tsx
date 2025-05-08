@@ -49,18 +49,19 @@ const AppointmentsUserMainView = () => {
         getSlots()
     }, [])
 
-    useEffect(() => {
-        const getAppointments = async () => {
-            try {
-                setLoading(true)
-                const response = await instance.get(`appointment/by-patient/4}`);
-                setAppointments(response.data)
-                setLoading(false)
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
-            }
+    const getAppointments = async () => {
+        try {
+            setLoading(true)
+            const response = await instance.get(`appointment/by-patient/4}`);
+            setAppointments(response.data)
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
+    }
+
+    useEffect(() => {
         getAppointments()
     }, [])
 
@@ -89,6 +90,7 @@ const AppointmentsUserMainView = () => {
                 patientId: user?.actualId, date: isoDate
             }
             await instance.post(`/appointment`, modifiedValues);
+            getAppointments()
             resetForm();
             triggerForm({
                 title: "",
@@ -118,6 +120,7 @@ const AppointmentsUserMainView = () => {
                     icon: "success",
                     confirmButtonText: "OK",
                 });
+                getAppointments()
             }
         } catch (error) {
             setLoading(false)
