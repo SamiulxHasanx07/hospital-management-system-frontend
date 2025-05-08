@@ -2,6 +2,7 @@
 
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import Button from '../button/Button';
 
 interface ModalProps {
     isOpen: boolean;
@@ -48,13 +49,14 @@ export default function Modal({ isOpen, closeModal, title, children }: ModalProp
                                 </div>
 
                                 <div className="mt-4">
-                                    <button
+                                    <Button
                                         type="button"
-                                        className="inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                                        variant='text'
+                                        className="w-100 inline-flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
                                         onClick={closeModal}
                                     >
-                                        Close
-                                    </button>
+                                        Close Modal
+                                    </Button>
                                 </div>
                             </Dialog.Panel>
                         </Transition.Child>
