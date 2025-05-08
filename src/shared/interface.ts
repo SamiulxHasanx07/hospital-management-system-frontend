@@ -60,3 +60,10 @@ export interface IPatient {
     gender: string;
     user: IUser;
 }
+export interface IDoctor {
+    id: number;
+    userId: number;
+    specialty: string;
+    experience: number;
+    user: IUser;
+}

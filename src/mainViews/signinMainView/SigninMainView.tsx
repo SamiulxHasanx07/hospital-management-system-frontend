@@ -7,6 +7,7 @@ import Button from '@/components/button/Button';
 import instance from '@/shared/baseServices';
 import { triggerForm, validateRequired } from '@/shared/internalServices';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const SigninMainView = () => {
     const [error, setError] = useState('');
@@ -126,6 +127,8 @@ const SigninMainView = () => {
                     </FormikForm>
                 )}
             </Formik>
+
+            <div className='text-center mt-5'>Don&lsquo;t have account? <Link href="/signup"><Button variant='text'>Register now</Button></Link></div>
         </div>
     );
 };

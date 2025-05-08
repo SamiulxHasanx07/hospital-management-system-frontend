@@ -8,6 +8,7 @@ import { useUser } from '@/context/UserContext';
 import Button from '@/components/button/Button';
 import instance from '@/shared/baseServices';
 import { triggerForm } from '@/shared/internalServices';
+import Link from 'next/link';
 
 const SignupMainView = () => {
     const [error, setError] = useState('');
@@ -125,6 +126,7 @@ const SignupMainView = () => {
                     </FormikForm>
                 )}
             </Formik>
+            <div className='text-center mt-5'>Already have an account? <Link href="/signin"><Button variant='text'>Login</Button></Link></div>
         </div>
     );
 };
