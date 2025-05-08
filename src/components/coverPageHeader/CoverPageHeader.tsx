@@ -14,7 +14,7 @@ const CoverPageHeader: React.FC = () => {
                     Hospital Management System
                 </h1>
                 <div className='text-white font-bold text-2xl flex gap-8'>
-                    <p>Software development II</p>
+                    <p>Software development II (CSE 2291)</p>
                 </div>
                 <div className='text-white font-bold text-2xl flex gap-8'>
                     <p>Semester: 4th</p>
