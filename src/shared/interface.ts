@@ -67,3 +67,17 @@ export interface IDoctor {
     experience: number;
     user: IUser;
 }
+
+export interface ISchedule {
+    id: number;
+    doctorId: number;
+    date: string;
+    visitFee: number;
+    branch: string;
+    floorNumber: string;
+    roomNumber: string;
+    location: string;
+    remarks: string;
+    status: string;
+    slotId: number;
+}
