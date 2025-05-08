@@ -48,17 +48,16 @@ const AdmitPatientMainView = () => {
     }, [])
 
 
-    useEffect(() => {
-        const getAllPatient = async () => {
-            try {
-                const response = await instance.get(`/admit-patient`)
-                setAdmissions(response.data)
-            } catch (error) {
-                console.log(error)
-            }
+    const getAllPatient = async () => {
+        try {
+            const response = await instance.get(`/admit-patient`)
+            setAdmissions(response.data)
+        } catch (error) {
+            console.log(error)
         }
+    }
+    useEffect(() => {
         getAllPatient()
-
     }, [])
 
     const initialValues = {
@@ -84,6 +83,7 @@ const AdmitPatientMainView = () => {
                     icon: "success",
                     confirmButtonText: "OK",
                 });
+                getAllPatient()
                 resetForm()
             }
         } catch (error) {
