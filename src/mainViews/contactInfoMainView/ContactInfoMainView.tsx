@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/button/Button';
 import { useUser } from '@/context/UserContext';
 import instance from '@/shared/baseServices';
 import { triggerForm } from '@/shared/internalServices';
@@ -143,12 +144,12 @@ const ContactInfoMainView = () => {
             </div>
 
             <div className="flex justify-end pt-4">
-                <button
+                <Button
                     type="submit"
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
                     Submit
-                </button>
+                </Button>
             </div>
         </form>
     );

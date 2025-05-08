@@ -81,3 +81,13 @@ export interface ISchedule {
     status: string;
     slotId: number;
 }
+
+
+export interface IBed {
+    id: number;
+    department: string;
+    roomNumber: string;
+    bedNumber: string;
+    available: boolean;
+    createdAt: string;
+}
