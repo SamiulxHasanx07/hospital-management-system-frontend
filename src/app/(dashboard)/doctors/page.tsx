@@ -1,27 +1,45 @@
 'use client';
 import instance from '@/shared/baseServices';
 import { IDoctor } from '@/shared/interface';
+import { triggerForm } from '@/shared/internalServices';
 import React, { useEffect, useState } from 'react';
+import { IoTrashOutline } from 'react-icons/io5';
 
 const Doctors = () => {
     const [doctors, setDoctors] = useState<IDoctor[] | null>(null);
     const [loading, setLoading] = useState(true);
+    const getDoctors = async () => {
+        try {
+            setLoading(true)
+            const response = await instance.get("/doctors");
+            setDoctors(response.data)
+            setLoading(false)
 
-    useEffect(() => {
-        const getDoctors = async () => {
-            try {
-                setLoading(true)
-                const response = await instance.get("/doctors");
-                setDoctors(response.data)
-                setLoading(false)
-
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
-            }
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
+    }
+    useEffect(() => {
         getDoctors()
     }, [])
+
+    const handleRemoveClick = async (id: number) => {
+        try {
+            const response = await instance.delete(`/doctors/${id}`);
+            if (response.status == 200 || response.status == 201) {
+                triggerForm({
+                    title: "",
+                    text: `Doctor deleted succesfull!`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+                getDoctors()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div>
             <div className='text-2xl'>All Doctors</div>
@@ -50,7 +68,7 @@ const Doctors = () => {
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.email}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.specialty}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.experience} years</td>
-                                    <td className="px-6 py-4 text-sm text-gray-700">{item.user.role}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700"><span className='cursor-pointer' onClick={() => handleRemoveClick(item.id)}><IoTrashOutline size={20} /></span></td>
                                 </tr>
                             )
                         })}

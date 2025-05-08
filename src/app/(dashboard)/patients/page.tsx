@@ -2,26 +2,44 @@
 
 import instance from '@/shared/baseServices';
 import { IPatient } from '@/shared/interface';
+import { triggerForm } from '@/shared/internalServices';
 import React, { useEffect, useState } from 'react';
+import { IoTrashOutline } from 'react-icons/io5';
 
 const PatientsMainView = () => {
     const [patients, setPatients] = useState<IPatient[] | null>(null);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const getPatients = async () => {
-            try {
-                setLoading(true)
-                const response = await instance.get("/patients");
-                setPatients(response.data)
-                setLoading(false)
-            } catch (error) {
-                console.log(error)
-                setLoading(false)
-            }
+    const getPatients = async () => {
+        try {
+            setLoading(true)
+            const response = await instance.get("/patients");
+            setPatients(response.data)
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
         }
+    }
+    useEffect(() => {
         getPatients()
     }, [])
+
+    const handleRemoveClick = async (id: number) => {
+        try {
+            const response = await instance.delete(`/patients/${id}`);
+            if (response.status == 200 || response.status == 201) {
+                triggerForm({
+                    title: "",
+                    text: `Doctor deleted succesfull!`,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+                getPatients()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -38,7 +56,7 @@ const PatientsMainView = () => {
                             <th className="px-6 py-3 text-left text-sm font-medium">Name</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Email</th>
                             <th className="px-6 py-3 text-left text-sm font-medium">Age</th>
-                            <th className="px-6 py-3 text-left text-sm font-medium">Role</th>
+                            <th className="px-6 py-3 text-left text-sm font-medium">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +70,7 @@ const PatientsMainView = () => {
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.name}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.user.email}</td>
                                     <td className="px-6 py-4 text-sm text-gray-700">{item.age}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-700">{item.user.role}</td>
+                                    <td className="px-6 py-4 text-sm text-gray-700"><span className='cursor-pointer' onClick={() => handleRemoveClick(item.id)}><IoTrashOutline size={20} /></span></td>
                                 </tr>
                             )
                         })}
